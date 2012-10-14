@@ -12,3 +12,10 @@ Try it out: http://spiffcloud.com/
 You can do votes, mind maps, brainstorming, ...
 
 Detailed description (german): http://scratchbook.ch/2008/10/28/die-wolken-ziehen-auf/
+
+TODO
+====
+
+* Setup description
+* Init DB automatically
+* Refactoring!
