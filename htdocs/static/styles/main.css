@@ -1,0 +1,156 @@
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	font-family: Trebuchet MS, Lucida Grande, Verdana, Arial, sans-serif;
+	background-color: #fff;
+}
+
+a {
+	text-decoration: none;
+	color: #fff;
+}
+
+a.active {
+	color: #fefefe;
+	background: #333;
+}
+
+img {
+	border: 0px;
+}
+
+div#fronthead {
+	position: relative;
+	top: 20px;
+	left: 20px;
+	width: 770px;
+	height: 80px;
+	}
+
+	div#fronthead a{
+		position: relative;
+		top: 0px;
+		left: 200px;
+		font-size: 25px;
+		color: #666;
+	}
+
+	div#fronthead a#homeurl {
+		color: #ccc;
+		left: 0px;
+	}
+
+	div#fronthead p {
+		display: inline;
+	}
+
+	div#fronthead input#search {
+		position: relative;
+		left: 0px;
+		top: 0px;
+		font-size: 25px;
+	}
+
+	div#fronthead form#searchform {
+		position: relative;
+		display: inline;
+		left: 200px;
+		top: 0px;
+		width: 200px;
+		font-size: 25px;
+		}
+
+		div#fronthead form#searchform input#search {
+			position: relative;
+			left: 0px;
+			top: 0px;
+			width: 150px;
+			font-size: 25px;
+		}
+
+	div#fronthead form#createform {
+		position: absolute;
+		display: inline;
+		left: 180px;
+		top: 0px;
+		width: 200px;
+		font-size: 25px;
+		}
+
+		div#fronthead form#createform p#slash {
+			position: absolute;
+			left: -16px;
+			top: 2px;
+			font-size: 25px;
+		}
+
+		div#fronthead form#createform input#spacename {
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 140px;
+			font-size: 25px;
+		}
+
+		div#fronthead form#createform input#createsubmit {
+			position: absolute;
+			left: 160px;
+			top: 0px;
+			width: 100px;
+			height: 35px;
+			color: #666;
+			background: #fff;
+			font-size: 25px;
+		}
+
+div#cloudhead {
+	position: relative;
+	top: 20px;
+	left: 20px;
+	width: 700px;
+	height: 80px;
+	}
+
+	div#cloudhead a#homeurl {
+		position: relative;
+		color: #ccc;
+		font-size: 25px;
+	}
+
+	div#cloudhead a#title {
+		position: relative;
+		left: 0px;
+		top: 0px;
+		color: #000;
+		font-size: 25px;
+	}
+
+div#tagcloud {
+	position: relative;
+	margin: auto;
+	width: 700px;
+	margin-top: 20px;
+	text-align: center;
+	}
+
+	div#tagcloud div#words a {
+		margin-right: 0.2em;
+		line-height: 1.0;
+	}
+
+	div#tagcloud form#inputarea {
+		position: relative;
+		left: 100px;
+		top: 20px;
+		width: 200px;
+		}
+
+		div#tagcloud form#inputarea input#word {
+			font-size: 40px;
+			margin-bottom: 200px;
+		}
+
