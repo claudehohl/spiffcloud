@@ -17,13 +17,61 @@ class Home extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->helper('cloud');
-        $this->output->enable_profiler(1);
+		$this->output->enable_profiler(1);
 	}
 	
 	function index($action = '') 
 	{
 		$this->load->model('word_model');
 		$this->load->library('tagcloud');
+		
+		if (!$this->db->table_exists('_words_in_space_cachetable')) 
+		{
+			$this->load->dbforge();
+			$fields = array(
+				'id' => array(
+					'type' => 'INT',
+					'constraint' => '11',
+					'unsigned' => true,
+					'auto_increment' => true,
+				) ,
+				'space_id' => array(
+					'type' => 'INT',
+					'constraint' => '11',
+					'unsigned' => true,
+				) ,
+				'word_id' => array(
+					'type' => 'INT',
+					'constraint' => '11',
+					'unsigned' => true,
+				) ,
+				'count' => array(
+					'type' => 'INT',
+					'constraint' => '11',
+					'unsigned' => true,
+				) ,
+				'word' => array(
+					'type' => 'VARCHAR',
+					'constraint' => '50',
+				) ,
+				'timestamp' => array(
+					'type' => 'INT',
+					'constraint' => '11',
+					'unsigned' => true,
+				) ,
+				'linked' => array(
+					'type' => 'TINYINT',
+					'constraint' => '1',
+				) ,
+			);
+			$this->dbforge->add_field($fields);
+			$this->dbforge->add_key('id', true);
+			$this->dbforge->add_key('space_id');
+			$this->dbforge->add_key('word_id');
+			$this->dbforge->add_key('count');
+			$this->dbforge->add_key('timestamp');
+			$this->dbforge->create_table('_words_in_space_cachetable', true);
+		}
 		
 		if (isset($_POST['spacename']) && $_POST['spacename'] != '') 
 		{
@@ -67,7 +115,7 @@ class Home extends CI_Controller
 			}
 			redirect($space_name);
 		}
-		$words = $this->word_model->get_words_in_space($space_name);
+		$words = $this->word_model->get_words_in_space_cached($space_name);
 		$words = $this->tagcloud->generate($words);
 		$this->load->view('html_header', array(
 			'title' => 'Spiffcloud - ' . $space_name
@@ -121,7 +169,7 @@ class Home extends CI_Controller
 				}
 				else
 				{
-					$words = $this->word_model->get_words_in_space($space_name);
+					$words = $this->word_model->get_words_in_space_cached($space_name);
 				}
 				$words = $this->tagcloud->generate($words);
 				$this->load->view('tagcloud', array(
@@ -136,7 +184,7 @@ class Home extends CI_Controller
 				$this->load->model('word_model');
 				$this->load->library('tagcloud');
 				$space_name = $this->uri->segment(4);
-				$words = $this->word_model->get_words_in_space($space_name);
+				$words = $this->word_model->get_words_in_space_cached($space_name);
 				$words = $this->tagcloud->generate($words, true);
 				$this->load->view('xml', array(
 					'words' => $words
@@ -167,6 +215,12 @@ class Home extends CI_Controller
 			// Load the download helper and send the file to your desktop
 			$this->load->helper('download');
 			force_download('spiffcloud.sql.gz', $backup);
+		}
+		else 
+		if ($action == 'rebuildcache') 
+		{
+			$this->load->model('word_model');
+			$this->word_model->rebuild_cache();
 		}
 	}
 }

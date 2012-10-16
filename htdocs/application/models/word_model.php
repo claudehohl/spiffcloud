@@ -1,24 +1,26 @@
 <?php
 /**
-* Class and Function List:
-* Function list:
-* - __construct()
-* - insert()
-* - create_space()
-* - create_word()
-* - create_ip()
-* - get_space_id()
-* - get_word_id()
-* - get_timestamp()
-* - get_ip_id()
-* - get_words_in_space()
-* - get_popular_spaces()
-* - get_spaces_by_search()
-* - _spiff_allowed()
-* - word_is_linked()
-* Classes list:
-* - Word_model extends CI_Model
-*/
+ * Class and Function List:
+ * Function list:
+ * - __construct()
+ * - insert()
+ * - create_space()
+ * - create_word()
+ * - create_ip()
+ * - get_space_id()
+ * - get_word_id()
+ * - get_timestamp()
+ * - get_ip_id()
+ * - get_words_in_space()
+ * - get_words_in_space_cached()
+ * - get_popular_spaces()
+ * - get_spaces_by_search()
+ * - _spiff_allowed()
+ * - word_is_linked()
+ * - rebuild_cache()
+ * Classes list:
+ * - Word_model extends CI_Model
+ */
 
 class Word_model extends CI_Model
 {
@@ -180,6 +182,20 @@ class Word_model extends CI_Model
 		return @$result;
 	}
 	
+	function get_words_in_space_cached($space_name) 
+	{
+		$space_id = $this->get_space_id($space_name);
+		$this->db->select('space_id, word_id, count as c, word, timestamp, linked');
+		$this->db->from('_words_in_space_cachetable');
+		$this->db->where('space_id', $space_id);
+		$this->db->order_by('c', 'DESC');
+		$this->db->order_by('timestamp', 'DESC');
+		$this->db->order_by('word_id', 'DESC');
+		$query = $this->db->get();
+		$result = $query->result_array();
+		return $result;
+	}
+	
 	function get_popular_spaces() 
 	{
 		$this->db->select('id, space_name, popularity, weight, timestamp');
@@ -309,6 +325,22 @@ class Word_model extends CI_Model
 		else
 		{
 			return false;
+		}
+	}
+	
+	function rebuild_cache() 
+	{
+		$spacewords = $this->get_words_in_space('Vornamen');
+		foreach ($spacewords as $w) 
+		{
+			$this->db->insert('_words_in_space_cachetable', array(
+				'space_id' => $w['space_id'],
+				'word_id' => $w['word_id'],
+				'count' => $w['c'],
+				'word' => $w['word'],
+				'timestamp' => $w['timestamp'],
+				'linked' => $w['linked'],
+			));
 		}
 	}
 }
